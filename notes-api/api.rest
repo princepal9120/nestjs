@@ -1,0 +1,38 @@
+### Register User - Valid Request
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "StrongPass123!"
+}
+
+### Register User - Invalid Request (missing name)
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "StrongPass123!"
+}
+
+### Register User - Invalid Request (weak password)
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "weak"
+}
+
+### Register User - Invalid Request (invalid email)
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "invalid-email",
+  "password": "StrongPass123!"
+}

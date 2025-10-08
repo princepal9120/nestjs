@@ -11,11 +11,12 @@ import { UserService } from './user/user.service';
 
 import { ConfigModule } from '@nestjs/config';
 import { PrismaService } from './prisma.service';
+import { NotesModule } from './notes/notes.module';
 
 
 
 @Module({
-  imports: [ConfigModule.forRoot(), AuthModule, UserModule],
+  imports: [ConfigModule.forRoot(), AuthModule, UserModule, NotesModule],
   controllers: [AppController, AuthController, UserController],
   providers: [AppService, AuthService, UserService, PrismaService],
 })

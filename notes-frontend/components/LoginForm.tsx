@@ -3,6 +3,8 @@ import { useAuthStore } from '../store/useStore';
 import { LoginCredentials } from '../types';
 
 const LoginForm: React.FC = () => {
+
+    const setCurrentView = useAuthStore((state) => state.setCurrentView);
     const [credentials, setCredentials] = useState<LoginCredentials>({
         email: '',
         password: '',
@@ -62,6 +64,15 @@ const LoginForm: React.FC = () => {
                     <button type="submit" className="btn btn-primary" disabled={loading}>
                         {loading ? 'Logging in...' : 'Login'}
                     </button>
+                    <p>
+                        Don't have an account?{' '}
+                        <button
+                            className="link-button"
+                            onClick={() => setCurrentView('register')}
+                        >
+                            Register here
+                        </button>
+                    </p>
                 </form>
             </div>
         </div>

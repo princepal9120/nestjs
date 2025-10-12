@@ -11,6 +11,8 @@ const RegisterForm: React.FC = () => {
     });
     const [error, setError] = useState<string>('');
     const [loading, setLoading] = useState(false);
+    
+    const setCurrentView = useAuthStore((state) => state.setCurrentView);
 
     const register = useAuthStore((state) => state.register);
 
@@ -77,6 +79,15 @@ const RegisterForm: React.FC = () => {
                     <button type="submit" className="btn btn-primary" disabled={loading}>
                         {loading ? 'Registering...' : 'Register'}
                     </button>
+                     <p>
+                        Already have an account?{' '}
+                        <button
+                            className="link-button"
+                            onClick={() => setCurrentView('login')}
+                        >
+                            Login here
+                        </button>
+                    </p>
                 </form>
             </div>
         </div>

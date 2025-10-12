@@ -22,29 +22,7 @@ export default function Home() {
     return (
         <main className="app">
             {currentView === 'login' ? <LoginForm /> : <RegisterForm />}
-            <div className="auth-switch">
-                {currentView === 'login' ? (
-                    <p>
-                        Don't have an account?{' '}
-                        <button 
-                            className="link-button" 
-                            onClick={() => setCurrentView('register')}
-                        >
-                            Register here
-                        </button>
-                    </p>
-                ) : (
-                    <p>
-                        Already have an account?{' '}
-                        <button 
-                            className="link-button" 
-                            onClick={() => setCurrentView('login')}
-                        >
-                            Login here
-                        </button>
-                    </p>
-                )}
-            </div>
+
         </main>
     );
 }

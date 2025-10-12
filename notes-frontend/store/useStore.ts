@@ -1,18 +1,19 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { API_BASE_URL, API_ENDPOINTS } from '../config/api';
+import { Note, LoginCredentials, CreateNoteData, UpdateNoteData, RegisterCredentials } from '../types';
 import axios from 'axios';
-import { API_ENDPOINTS } from '../config/api';
-import { Note, LoginCredentials, CreateNoteData, UpdateNoteData } from '../types';
 
 // Define the auth store state and actions
 interface AuthState {
-  isAuthenticated: boolean;
-  user: any;
-  login: (credentials: LoginCredentials) => Promise<void>;
-  register: (credentials: RegisterCredentials) => Promise<void>;
-  logout: () => void;
-  currentView: 'login' | 'register';
-  setCurrentView: (view: 'login' | 'register') => void;
+    isAuthenticated: boolean;
+    user: any;
+    token: string | null;
+    login: (credentials: LoginCredentials) => Promise<void>;
+    register: (credentials: RegisterCredentials) => Promise<void>;
+    logout: () => void;
+    currentView: 'login' | 'register';
+    setCurrentView: (view: 'login' | 'register') => void;
+    checkAuth: () => void;
 }
 
 // Define the notes store state and actions
@@ -28,53 +29,88 @@ interface NotesState {
 }
 
 // Auth Store - Handles authentication state
-export const useAuthStore = create<AuthState>((set) => ({
-  isAuthenticated: false,
-  user: null,
-  currentView: 'login',
-  setCurrentView: (view) => set({ currentView: view }),
-  login: async (credentials: LoginCredentials) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(credentials),
-      });
+export const useAuthStore = create<AuthState>((set, get) => ({
+    isAuthenticated: false,
+    user: null,
+    token: null,
+    currentView: 'login',
 
-      if (!response.ok) {
-        throw new Error('Login failed');
-      }
+    setCurrentView: (view) => set({ currentView: view }),
 
-      const data = await response.json();
-      localStorage.setItem('token', data.access_token);
-      set({ isAuthenticated: true, user: data.user });
-    } catch (error) {
-      throw error;
-    }
-  },
-  register: async (credentials: RegisterCredentials) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(credentials),
-      });
+    checkAuth: () => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            set({ isAuthenticated: true, token });
+        }
+    },
 
-      if (!response.ok) {
-        throw new Error('Registration failed');
-      }
+    login: async (credentials: LoginCredentials) => {
+        try {
+            const response = await fetch(API_ENDPOINTS.LOGIN, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(credentials),
+            });
 
-      const data = await response.json();
-      localStorage.setItem('token', data.access_token);
-      set({ isAuthenticated: true, user: data.user });
-    } catch (error) {
-      throw error;
-    }
-  },
-  logout: () => {
-    localStorage.removeItem('token');
-    set({ isAuthenticated: false, user: null });
-  },
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Login failed');
+            }
+
+            localStorage.setItem('token', data.access_token);
+            set({
+                isAuthenticated: true,
+                user: data.user,
+                token: data.access_token,
+                currentView: 'login'
+            });
+        } catch (error) {
+            console.error('Login error:', error);
+            throw error;
+        }
+    },
+
+    register: async (credentials: RegisterCredentials) => {
+        try {
+            const response = await fetch(API_ENDPOINTS.REGISTER, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(credentials),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Registration failed');
+            }
+
+            localStorage.setItem('token', data.access_token);
+            set({
+                isAuthenticated: true,
+                user: data.user,
+                token: data.access_token,
+                currentView: 'login'
+            });
+        } catch (error) {
+            console.error('Registration error:', error);
+            throw error;
+        }
+    },
+
+    logout: () => {
+        localStorage.removeItem('token');
+        set({
+            isAuthenticated: false,
+            user: null,
+            token: null,
+            currentView: 'login'
+        });
+    },
 }));
 
 // Notes Store - Handles notes state and operations

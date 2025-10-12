@@ -1,0 +1,284 @@
+NOTES FRONTEND APPLICATION - SETUP INSTRUCTIONS
+================================================
+
+WHAT HAS BEEN CREATED:
+----------------------
+A complete Next.js 14 frontend application with TypeScript and Zustand state management
+that connects to your NestJS Notes API backend.
+
+PROJECT LOCATION:
+-----------------
+/Users/prince/Desktop/coding/nestjs-course/notes-frontend
+
+FEATURES INCLUDED:
+------------------
+✓ User login/logout with JWT authentication
+✓ View all notes after login
+✓ Create new notes
+✓ Edit existing notes
+✓ Delete notes
+✓ Persistent authentication (localStorage)
+✓ Loading and error states
+✓ Responsive design
+✓ Modern gradient UI
+
+TECHNOLOGY STACK:
+-----------------
+- Next.js 14 (App Router)
+- TypeScript
+- Zustand (State Management)
+- Axios (HTTP Client)
+- Custom CSS styling
+
+PROJECT STRUCTURE:
+------------------
+notes-frontend/
+├── app/
+│   ├── layout.tsx          - Root layout component
+│   ├── page.tsx            - Main page with auth routing
+│   └── globals.css         - All styling
+├── components/
+│   ├── LoginForm.tsx       - Login form
+│   ├── NotesList.tsx       - Notes list with all CRUD
+│   ├── NoteItem.tsx        - Individual note card
+│   └── NoteForm.tsx        - Create/Edit form
+├── store/
+│   └── useStore.ts         - Zustand stores (auth & notes)
+├── types/
+│   └── index.ts            - TypeScript type definitions
+├── config/
+│   └── api.ts              - API endpoint configuration
+└── package.json            - Dependencies and scripts
+
+HOW TO RUN THE APPLICATION:
+---------------------------
+
+STEP 1: Start Your Backend (NestJS API)
+   Navigate to your backend directory and start it:
+   
+   $ cd /Users/prince/Desktop/coding/nestjs-course/notes-api
+   $ npm run start:dev
+   
+   Make sure it's running on http://localhost:3000
+
+STEP 2: Start the Frontend
+   The dependencies are already installed. Just run:
+   
+   $ cd /Users/prince/Desktop/coding/nestjs-course/notes-frontend
+   $ npm run dev
+   
+   The frontend will start on http://localhost:3001
+
+STEP 3: Open in Browser
+   Navigate to: http://localhost:3001
+   
+   You'll see the login screen.
+
+STEP 4: Login
+   Enter your registered email and password
+   After successful login, you'll see your notes dashboard
+
+USING THE APPLICATION:
+----------------------
+
+LOGIN:
+- Enter email and password
+- Token is automatically stored for persistence
+- Invalid credentials will show an error message
+
+VIEW NOTES:
+- All your notes are displayed in a card grid
+- Each note shows title, content, and creation date
+- Empty state message if no notes exist
+
+CREATE NOTE:
+1. Click "New Note" button
+2. Fill in title and content
+3. Click "Create Note"
+4. Note appears immediately in the list
+
+EDIT NOTE:
+1. Click "Edit" button on any note
+2. Form appears with current values
+3. Modify title or content
+4. Click "Update Note"
+5. Changes reflect immediately
+
+DELETE NOTE:
+1. Click "Delete" button on any note
+2. Confirm deletion in popup
+3. Note is removed immediately
+
+LOGOUT:
+- Click "Logout" button in header
+- Confirm logout
+- Returns to login screen
+- Session and notes cleared
+
+CONFIGURATION:
+--------------
+
+API ENDPOINT:
+If your backend runs on a different port, edit:
+File: config/api.ts
+Change: export const API_BASE_URL = 'http://localhost:3000';
+To: Your backend URL
+
+PORT CONFIGURATION:
+Frontend runs on port 3001 (configured in package.json)
+Backend should run on port 3000
+
+CORS CONFIGURATION:
+Your NestJS backend must have CORS enabled.
+In your backend's main.ts, ensure you have:
+   app.enableCors();
+
+API ENDPOINTS USED:
+-------------------
+POST   /auth/login           - User authentication
+GET    /api/notes            - Fetch all notes
+POST   /api/notes            - Create new note
+PATCH  /api/notes/:id        - Update note
+DELETE /api/notes/:id        - Delete note
+
+Note: Your backend uses PATCH (not PUT) for updates
+
+STATE MANAGEMENT:
+-----------------
+
+AUTH STORE (useAuthStore):
+- Manages JWT token
+- Handles login/logout
+- Persists to localStorage
+- Provides isAuthenticated state
+
+NOTES STORE (useNotesStore):
+- Manages notes array
+- Handles loading states
+- Manages error messages
+- Provides CRUD operations
+- Auto-includes JWT in requests
+
+COMPONENTS OVERVIEW:
+--------------------
+
+LoginForm.tsx:
+- Email/password inputs
+- Form validation
+- Error handling
+- Loading state during login
+
+NotesList.tsx:
+- Main dashboard after login
+- Header with New Note and Logout buttons
+- Error banner for API errors
+- Loading state
+- Empty state message
+- Notes grid display
+- Manages create/edit form visibility
+
+NoteItem.tsx:
+- Individual note card
+- Title, content, and date display
+- Edit and Delete action buttons
+- Hover effects
+
+NoteForm.tsx:
+- Reusable for both create and edit
+- Title input
+- Content textarea
+- Submit and Cancel buttons
+- Loading state during save
+
+STYLING:
+--------
+All styles in: app/globals.css
+
+Theme:
+- Purple gradient background
+- White cards with shadows
+- Blue gradient buttons
+- Red delete buttons
+- Responsive grid layout
+- Mobile-friendly
+
+TROUBLESHOOTING:
+----------------
+
+ISSUE: CORS errors in browser console
+FIX: Ensure your NestJS backend has CORS enabled:
+     In main.ts: app.enableCors();
+
+ISSUE: Can't connect to backend
+FIX: 1. Verify backend is running on http://localhost:3000
+     2. Check config/api.ts has correct URL
+     3. Check browser console for exact error
+
+ISSUE: Authentication fails
+FIX: 1. Verify email/password are correct
+     2. Check backend logs
+     3. Ensure /auth/login endpoint works
+
+ISSUE: Notes don't load
+FIX: 1. Check JWT token in browser DevTools > Application > Local Storage
+     2. Verify token is being sent in request headers
+     3. Check backend authentication middleware
+
+ISSUE: Port already in use
+FIX: 1. Kill process on port 3001: $ lsof -ti:3001 | xargs kill -9
+     2. Or change port in package.json scripts
+
+BROWSER COMPATIBILITY:
+----------------------
+✓ Chrome/Edge (latest)
+✓ Firefox (latest)
+✓ Safari (latest)
+✓ Mobile browsers
+
+DEVELOPMENT COMMANDS:
+---------------------
+Start dev server:     npm run dev
+Build for production: npm run build
+Start production:     npm start
+Run linting:          npm run lint
+
+TESTING CHECKLIST:
+------------------
+□ Backend is running on port 3000
+□ Frontend is running on port 3001
+□ Can login with valid credentials
+□ Invalid login shows error
+□ Notes list loads after login
+□ Can create a new note
+□ Can edit an existing note
+□ Can delete a note (with confirmation)
+□ Can logout successfully
+□ Token persists on page refresh
+□ Responsive on mobile screen
+
+NEXT STEPS:
+-----------
+1. Start your backend: cd notes-api && npm run start:dev
+2. Start the frontend: cd notes-frontend && npm run dev
+3. Open http://localhost:3001
+4. Login and start managing notes!
+
+ADDITIONAL NOTES:
+-----------------
+- Authentication token is stored in localStorage (key: auth-storage)
+- Token automatically included in all API requests
+- Form validation on all inputs
+- Confirmation dialogs for destructive actions
+- Optimistic UI updates for better UX
+- Error messages cleared on user interaction
+
+CUSTOMIZATION:
+--------------
+Colors: Edit app/globals.css
+API endpoints: Edit config/api.ts
+Types: Edit types/index.ts
+State logic: Edit store/useStore.ts
+
+For questions or issues, check the full README.md file.
+
+Happy coding! 🚀

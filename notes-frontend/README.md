@@ -52,41 +52,47 @@ notes-frontend/
 ### Installation
 
 1. **Install dependencies:**
+
    ```bash
    cd notes-frontend
    npm install
    ```
 
 2. **Configure API endpoint (if needed):**
-   
+
    Open `config/api.ts` and update the base URL if your backend runs on a different port:
+
    ```typescript
-   export const API_BASE_URL = 'http://localhost:3000';
+   export const API_BASE_URL = "http://localhost:3000";
    ```
 
 3. **Start the development server:**
+
    ```bash
    npm run dev
    ```
 
 4. **Open in browser:**
-   
+
    Navigate to http://localhost:3000 (or the port shown in terminal)
 
 ## Usage
 
 ### Login
+
 - Use your registered email and password
 - JWT token is stored securely in localStorage
 - Token persists across page refreshes
 
 ### Managing Notes
+
 - **View**: All your notes are displayed in a card grid
 - **Create**: Click "New Note" button, fill the form, submit
 - **Edit**: Click "Edit" on any note, modify and save
 - **Delete**: Click "Delete" on any note (with confirmation)
 
 ### Logout
+
 - Click the "Logout" button in the header
 - This clears your session and notes data
 
@@ -103,12 +109,14 @@ The application communicates with these backend endpoints:
 ## State Management
 
 ### Auth Store
+
 - Manages authentication state
 - Stores JWT token
 - Persists to localStorage
 - Provides login/logout actions
 
 ### Notes Store
+
 - Manages notes array
 - Handles loading/error states
 - Provides CRUD operations
@@ -117,24 +125,28 @@ The application communicates with these backend endpoints:
 ## Key Components
 
 ### LoginForm
+
 - Email/password input
 - Form validation
 - Error handling
 - Loading state
 
 ### NotesList
+
 - Notes grid display
 - Create/Edit toggle
 - Delete confirmation
 - Error notifications
 
 ### NoteForm
+
 - Reusable for create/edit
 - Form validation
 - Loading states
 - Cancel functionality
 
 ### NoteItem
+
 - Card-based display
 - Edit/Delete actions
 - Timestamp display
@@ -143,14 +155,18 @@ The application communicates with these backend endpoints:
 ## Customization
 
 ### Styling
+
 All styles are in `app/globals.css`. The app uses:
+
 - Purple gradient theme
 - Responsive grid layout
 - Card-based design
 - Smooth transitions
 
 ### API Configuration
+
 Update `config/api.ts` to change:
+
 - Base URL
 - Endpoint paths
 - Request configuration
@@ -158,16 +174,19 @@ Update `config/api.ts` to change:
 ## Development
 
 ### Build for production:
+
 ```bash
 npm run build
 ```
 
 ### Start production server:
+
 ```bash
 npm start
 ```
 
 ### Linting:
+
 ```bash
 npm run lint
 ```
@@ -175,18 +194,22 @@ npm run lint
 ## Troubleshooting
 
 ### CORS Issues
+
 If you get CORS errors, ensure your NestJS backend has CORS enabled:
+
 ```typescript
 // In main.ts
 app.enableCors();
 ```
 
 ### Authentication Errors
+
 - Check that your backend is running
 - Verify the API_BASE_URL in config/api.ts
 - Ensure you're using the correct email/password
 
 ### Notes Not Loading
+
 - Check browser console for errors
 - Verify JWT token is being sent in headers
 - Check backend logs for authentication issues

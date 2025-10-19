@@ -1,0 +1,43 @@
+# Stage 1: Build
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+
+# Install pnpm globally
+RUN npm install -g pnpm
+
+# Copy package files
+COPY package.json pnpm-lock.yaml ./
+
+# Install all dependencies (including dev) for build
+RUN pnpm install --frozen-lockfile
+
+# Copy source code
+COPY . .
+
+# Generate Prisma client
+RUN npx prisma generate
+
+# Build the app
+RUN pnpm run build
+
+# Stage 2: Production
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Install pnpm
+RUN npm install -g pnpm
+
+# Copy only production dependencies and built code from builder
+COPY --from=builder /app /app
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs \
+    && adduser -S nestjs -u 1001 \
+    && chown -R nestjs:nodejs /app
+USER nestjs
+
+EXPOSE 3000
+
+CMD ["pnpm", "run", "start:prod"]

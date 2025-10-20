@@ -1,6 +1,6 @@
 // API Configuration - easily change the base URL here
-export const API_BASE_URL = process.env.BACKEND_URL || 'http://localhost:3000';
-
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL 
+console.log("Backend URL:", API_BASE_URL);
 // API Endpoints
 export const API_ENDPOINTS = {
     LOGIN: `${API_BASE_URL}/api/login`,
